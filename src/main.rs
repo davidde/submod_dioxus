@@ -12,8 +12,26 @@ fn app(cx: Scope) -> Element {
       ul {
         li {
           h3 { "Select a subtitle file:" }
-          label { r#for: "subfile", "Subtitle file: "}
           input { r#type: "file" , id: "subfile"}
+        }
+        li {
+          h3 { "Choose seconds modifier:" }
+          select {
+            id: "sign",
+            option {
+              value: "+",
+              "+"
+            }
+            option {
+              value: "-",
+              "-"
+            }
+          }
+          input {
+            r#type: "number",
+            min: "0",
+            step: "0.01",
+          }
         }
       }
       
