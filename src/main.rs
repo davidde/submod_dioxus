@@ -11,11 +11,11 @@ fn app(cx: Scope) -> Element {
       h1 { "Subtitle Modifier"}
       ul {
         li {
-          h3 { "Select a subtitle file:" }
+          h2 { "Select a subtitle file:" }
           input { r#type: "file" , id: "subfile"}
         }
         li {
-          h3 { "Choose seconds modifier:" }
+          h2 { "Choose seconds modifier:" }
           select {
             id: "sign",
             option {
@@ -33,10 +33,38 @@ fn app(cx: Scope) -> Element {
             step: "0.01",
           }
         }
+        li {
+          h2 { "Choose output file:" }
+          input {
+            r#type: "radio",
+            name: "output_name",
+            id: "overwrite_name",
+            value: "overwrite",
+          }
+          label {
+            r#for: "overwrite_name",
+            "Overwrite input file"
+          }
+          br {}
+          input {
+            r#type: "radio",
+            name: "output_name",
+            id: "custom_name",
+            value: "custom",
+          }
+          label {
+            r#for: "custom_name",
+            "Custom name: "
+          }
+          br {}
+          input {
+            r#type: "text",
+            id: "filename",
+            class: "hidden",
+            size: "75"
+          }
+        }
       }
-      
     }
-    
-    
   })
 }

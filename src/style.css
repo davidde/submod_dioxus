@@ -29,3 +29,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-weight: 300;
 }
+
+h1 {
+  font-size: 3em;
+  padding: 0.6em;
+}
+
+#filename {
+  margin: 0 1.4rem;
+}
+
+.hidden {
+  visibility: hidden;
+}
