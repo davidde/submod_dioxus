@@ -9,6 +9,9 @@ fn app(cx: Scope) -> Element {
   let subtitle_path = use_state(&cx, || "".to_string());
   let sign = use_state(&cx, || 1);
   let number = use_state(&cx, || 0.0);
+  let overwrite_name_bool = use_state(&cx, || false);
+  let custom_name_bool = use_state(&cx, || false);
+  let custom_output_name = use_state(&cx, || "".to_string());
 
 
   cx.render(rsx!{
@@ -63,9 +66,11 @@ fn app(cx: Scope) -> Element {
             r#type: "radio",
             name: "output_name",
             id: "overwrite_name",
-            value: "overwrite",
+            value: "{overwrite_name_bool}",
             onclick: move |_| {
               hidden_status.set("hidden");
+              overwrite_name_bool.set(true);
+              custom_name_bool.set(false);
             }
           }
           label {
@@ -77,9 +82,11 @@ fn app(cx: Scope) -> Element {
             r#type: "radio",
             name: "output_name",
             id: "custom_name",
-            value: "custom",
+            value: "{custom_name_bool}",
             onclick: move |_| {
               hidden_status.set("");
+              custom_name_bool.set(true);
+              overwrite_name_bool.set(false);
             }
           }
           label {
@@ -89,9 +96,13 @@ fn app(cx: Scope) -> Element {
           br {}
           input {
             r#type: "text",
-            id: "filename",
+            id: "custom_output_name",
             class: "{hidden_status}",
-            size: "75"
+            size: "75",
+            value: "{custom_output_name}",
+            oninput: move |evt| {
+              custom_output_name.set(evt.value.clone());
+            }
           }
         }
         br {}
@@ -103,7 +114,8 @@ fn app(cx: Scope) -> Element {
         }
         br {} br {} br {}
         textarea {
-          value: "{number}",
+          id: "feedback",
+          value: "{custom_output_name}",
           rows: "4",
           cols: "50"
         }
