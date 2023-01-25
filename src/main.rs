@@ -1,5 +1,7 @@
 use dioxus::prelude::*;
 
+mod submod;
+
 fn main() {
   dioxus_web::launch(app);
 }

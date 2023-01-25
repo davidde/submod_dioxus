@@ -8,3 +8,5 @@ edition = "2021"
 [dependencies]
 dioxus = { version = "0.3.1" }
 dioxus-web = { version = "0.3.0" }
+anyhow = "1.0"
+regex = "1"
