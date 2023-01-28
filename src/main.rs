@@ -1,4 +1,5 @@
-use dioxus::prelude::*;
+use dioxus::{prelude::*};
+use std::path::{Path, PathBuf};
 
 mod submod;
 
@@ -10,11 +11,11 @@ fn app(cx: Scope) -> Element {
   let hidden_status = use_state(&cx, || "hidden");
   let subtitle_path = use_state(&cx, || "".to_string());
   let sign = use_state(&cx, || 1);
-  let number = use_state(&cx, || 0.0);
+  let seconds = use_state(&cx, || 0.0);
   let overwrite_name_bool = use_state(&cx, || false);
   let custom_name_bool = use_state(&cx, || false);
   let custom_output_name = use_state(&cx, || "".to_string());
-
+  let feedback = use_state(&cx, || "".to_string());
 
   cx.render(rsx!{
     style { [rsx!{include_str!("../src/style.css")}].into_iter() }
@@ -56,9 +57,9 @@ fn app(cx: Scope) -> Element {
             r#type: "number",
             min: "0",
             step: "0.01",
-            value: "{number}",
+            value: "{seconds}",
             oninput: move |evt| {
-              number.set(evt.value.clone().parse::<f64>().unwrap());
+              seconds.set(evt.value.clone().parse::<f64>().unwrap());
             }
           }
         }
@@ -110,22 +111,37 @@ fn app(cx: Scope) -> Element {
         br {}
         button {
           onclick: move |_| {
-            submod();
+            let input_path = Path::new(subtitle_path.get());
+            let output_path = if *overwrite_name_bool.get() { PathBuf::from(input_path) } else {
+              input_path.parent().expect("Incorrect subtitle path").join(custom_output_name.get())
+            };
+            let seconds = *seconds.get() * *sign.get() as f64;
+
+            let deleted_subs = match submod::transform(&input_path, &output_path, seconds) {
+              Ok(num) => num,
+              Err(error) => {
+                  feedback.set(error.to_string());
+                  return;
+              }
+            };
+            if deleted_subs > 1 {
+              feedback.set(format!("Done. {} lines were deleted.", deleted_subs));
+            } else if deleted_subs > 0 {
+              feedback.set(format!("Done. {} line was deleted.", deleted_subs));
+            } else {
+              feedback.set(String::from("Done."));
+            }
           },
           "Modify"
         }
         br {} br {} br {}
         textarea {
           id: "feedback",
-          value: "{custom_output_name}",
+          value: "{feedback}",
           rows: "4",
           cols: "50"
         }
       }
     }
   })
-}
-
-fn submod() {
-
 }
