@@ -6,5 +6,5 @@ As the name indicates, it uses the [Dioxus GUI toolkit](https://dioxuslabs.com/)
 
 To run the app locally, run:
 ```
-trunk serve
+cargo run
 ```
