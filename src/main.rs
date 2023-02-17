@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 mod submod;
 
 fn main() {
-  dioxus_web::launch(app);
+  dioxus_desktop::launch(app);
 }
 
 fn app(cx: Scope) -> Element {
